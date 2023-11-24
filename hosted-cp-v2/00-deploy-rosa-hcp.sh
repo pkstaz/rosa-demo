@@ -1,8 +1,20 @@
 #!/bin/sh
 #### WHEN YOU EXECUTE THIS, YOU CAN CHANGE VARIABLES ####
-export CLUSTER_NAME=cestay-lab
+export CLUSTER_NAME=
 export REGION=us-east-2
-export PREFIX_NAME=cestay
+export PREFIX_NAME=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_SECRET_ACCESS_KEY=
+
+#### AWS ACCESS KEY ID ####
+read -p "AWS ACCESS KEY ID: [$AWS_ACCESS_KEY_ID]: " awsid
+AWS_ACCESS_KEY_ID=${awsid:-$AWS_ACCESS_KEY_ID}
+echo 'your id' $AWS_ACCESS_KEY_ID
+
+#### AWS ACCESS SECRET ID ####
+read -p "AWS ACCESS SECRET ID: [$AWS_SECRET_ACCESS_KEY]: " awssecret
+AWS_SECRET_ACCESS_KEY=${awssecret:-$AWS_SECRET_ACCESS_KEY}
+echo 'your secret' $AWS_SECRET_ACCESS_KEY
 
 #### CLUSTER NAME ####
 read -p "Cluster Name: [$CLUSTER_NAME]: " name
@@ -21,16 +33,6 @@ rosa list regions --hosted-cp
 read -p "Region ID: [$REGION]: " region
 REGION=${region:-$REGION}
 echo 'your region:' $REGION
-
-#### AWS ACCESS KEY ID ####
-read -p "AWS ACCESS KEY ID: [$AWS_ACCESS_KEY_ID]: " awsid
-AWS_ACCESS_KEY_ID=${awsid:-$AWS_ACCESS_KEY_ID}
-echo 'your id' $AWS_ACCESS_KEY_ID
-
-#### AWS ACCESS SECRET ID ####
-read -p "AWS ACCESS SECRET ID: [$AWS_SECRET_ACCESS_KEY]: " awssecret
-AWS_SECRET_ACCESS_KEY=${awssecret:-$AWS_SECRET_ACCESS_KEY}
-echo 'your secret' $AWS_SECRET_ACCESS_KEY
 
 git clone https://github.com/openshift-cs/terraform-vpc-example
 cd terraform-vpc-example
@@ -53,5 +55,8 @@ rosa create cluster --cluster-name=$CLUSTER_NAME --sts --mode=auto --hosted-cp -
 cd ..
 rm -rf terraform-vpc-example/
 
-echo 'Remember to save the oidc_id:' $OIDC_ID
-echo 'Remember to save the role prefix' $PREFIX_NAME
+
+echo 'Important facts to remember:'
+echo 'Cluster Name:' $CLUSTER_NAME
+echo 'OIDC ID:' $OIDC_ID
+echo 'Prefix Name:' $PREFIX_NAME
